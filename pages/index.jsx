@@ -466,7 +466,7 @@ export default function GhostGunGame() {
     try {
       // Keep only last 20 messages to stay within token limits
       const trimmedMsgs = msgs.length > 20 ? [msgs[0], ...msgs.slice(-19)] : msgs;
-      const res  = await fetch("/api/gm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 1024, system: buildSystemPrompt(name || playerName, state !== undefined ? state : gameState), messages: trimmedMsgs }) });
+      const res  = await fetch("/api/gm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1024, system: buildSystemPrompt(name || playerName, state !== undefined ? state : gameState), messages: trimmedMsgs }) });
       let data;
       try { data = await res.json(); } catch (e) { throw new Error(`JSON parse failed (HTTP ${res.status}): ${e.message}`); }
       if (!res.ok || data.error) {
