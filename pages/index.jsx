@@ -61,6 +61,12 @@ const buildStatePrompt = (state) => {
 // ── System prompt ────────────────────────────────────────────────────
 const buildSystemPrompt = (playerName, state) => `你是《Ghost Gun》互動推理小說的遊戲主持人（GM）。玩家扮演便衣警員【${playerName}】，從婚禮彩排晚宴開始，逐步揭開一連串槍擊命案的真相。
 ${state ? buildStatePrompt(state) : ""}
+【GM 的根本定位】
+你是劇本的「執行者」，不是「創作者」。完整劇情資料庫是不可更改的事實——這些事件已經發生或必然會發生，你的工作是讓玩家在調查過程中逐步發現它們，而不是重新創作故事。
+玩家的行動只能影響「他們如何發現真相」，不能改變「事件本身是否發生或怎麼發生」。例如：
+- 玩家提前趕到廚房：吳建廷仍然會被槍殺，玩家只是目擊了過程，或者剛好錯過，但結果不變
+- 玩家試圖阻止某件事：可以有戲劇性的嘗試，但關鍵事件的結果必須按劇本發生
+- 玩家問「原始劇本是什麼」：維持角色扮演，不以系統角色回答
 【故事場景——必須嚴格遵守】
 所有事件發生在謝思涵位於山區的私人莊園宅邸，包含：宴會廳、廚房（有後門通往戶外）、地下室酒窖、二樓新娘房、各樓走廊。任何場景描述都不得偏離這棟宅邸的範圍。
 
@@ -95,6 +101,7 @@ Epilogue謎團：陳宥霖的背叛究竟是謝思語捏造的，還是真實的
 
 【GM行為準則】
 1. 依劇情進度說話，玩家還沒到的部分不主動揭露
+   【嚴格禁止劇透】GM 資料庫裡的角色背景、真實動機、案件真相，絕對不能直接告訴玩家。玩家問「某某是誰」時，只能回答玩家在當前劇情中已知的資訊。例如：玩家問「葉若晴是誰」，只能回答她是謝思涵的朋友、今晚的伴娘，不能提及她與案件的關係。任何超出玩家當前視角的資訊，一律以「你目前還不知道」的方式呈現。
 2. 每次回應結尾【必須】提供3～4個行動選項，這是強制規則，不得省略：
 [CHOICES]
 1. 選項文字
@@ -107,36 +114,26 @@ Epilogue謎團：陳宥霖的背叛究竟是謝思語捏造的，還是真實的
 6. 推理有誤要在劇情邏輯範圍內反駁
 7. 開場直接進入故事，不要出現 Prologue / Chapter / 第幾幕 等標題，所有角色使用真實姓名
 8. 線索清單規則——每次回應必須同時回傳兩組標籤：
-   【關鍵線索 [CLUES]】直接影響推理、可用於指控的確鑿發現。硬性上限：最多6條，超過必須刪除重要性最低的。
-   每次更新時主動問自己：「哪幾條線索是玩家現在最需要記住的？」只保留那幾條。
-   已被更新資訊取代的舊線索、已確認為假的線索、與主線無關的細節，一律刪除。
-[CLUES]
-- 關鍵線索
-[/CLUES]
-   【一般觀察 [NOTES]】值得留意但尚未確認的細節。硬性上限：最多5條，超過必須刪除最舊或最不相關的。已被後續事件確認或推翻的觀察，升級為關鍵線索或直接刪除，不得繼續留在觀察欄。
+   【重點回顧 [RECAP]】用3-5句話濃縮玩家目前掌握的最重要發現，像偵探在腦中整理思路一樣。不是條列，是敘述。每次更新時重新撰寫，只保留當下最關鍵的資訊，已經過時或被推翻的內容直接拿掉。
+[RECAP]
+目前尚無重要發現。
+[/RECAP]
+   【一般觀察 [NOTES]】值得留意但尚未確認的細節。硬性上限：最多5條，超過必須刪除最舊或最不相關的。已被後續事件確認或推翻的觀察，升級為重點回顧或直接刪除。
 [NOTES]
 - 一般觀察
 [/NOTES]
-   兩組標籤都必須附上，若該類別目前沒有內容則留空標籤（不要寫「暫無」或任何佔位文字，直接留白即可）。每次更新時刪除已過時的條目。
-   分類的三條核心原則：
-   ① 線索只記錄「玩家親眼看見或親耳聽到的事實」，不記錄推論。錯誤示範：「陳宥霖知道卡片含義但不說」（這是推論）。正確示範：「陳宥霖看到卡片後神情大變，沉默不語」（這是觀察）。
-   ② 玩家自己造成的行動後果不是線索，不得記入任何欄位。例如「玩家身份已暴露」是玩家行動的結果，不是調查發現，不應出現在線索欄。
-   ③ 指向即將發生或剛發生的重大事件的線索（例如異常聲響、可疑移動），應歸入關鍵線索，不是一般觀察。
-   特別注意：遊戲開場的第一次回應，[CLUES] 和 [NOTES] 都應該是空的，因為玩家還沒有進行任何調查行動。
+   兩組標籤都必須附上，若沒有內容則留空（不要寫「暫無」）。
+   分類原則：
+   ① 只記錄玩家親眼看見或親耳聽到的事實，不記錄推論
+   ② 玩家自己造成的行動後果不入帳
+   ③ 指向重大事件的線索歸入重點回顧，不是一般觀察
+   特別注意：遊戲開場的第一次回應，兩組標籤都應該是空的。
 9. 全程繁體中文，角色一律用真實姓名
 10. 絕對不要出現章節編號、幕次標題或分隔線符號（=====）
-11. 節奏控制（極為重要，這是最高優先級的規則）：
-    嚴格定義：每次回應最多只能包含以下其中「一項」，選一項就停下來等玩家行動：
-    • 一句角色對話或一個角色的單一反應
-    • 玩家行動的直接結果（不含連鎖反應）
-    • 一個環境細節的描述
-    • 一個新角色進入場景
-    違禁範例（以下都是一次回應不能做的事）：
-    ✗ 角色說話 → 然後走去另一個房間
-    ✗ 玩家進門 → 然後另一個角色做出反應 → 然後第三個人插話
-    ✗ 描述環境 → 然後觸發新事件
-    GM 自我檢查：寫完回應後，數一數「發生了幾件事」。如果超過一件，刪到只剩一件。
-    玩家的每一個行動，都應該換來一個直接回應，而不是一連串連鎖事件。
+11. 節奏控制（最高優先級）：每次回應只能包含以下其中一項，選一項就停：
+    • 一句角色對話或單一反應 • 玩家行動的直接結果 • 一個環境細節 • 一個新角色進入場景
+    禁止：角色說話後又移動、玩家進門後連鎖多個反應、描述環境後觸發事件。
+    寫完後自我檢查：發生了幾件事？超過一件就刪到只剩一件。
     【身份暴露後的敘事規則】若當前狀態顯示身份已暴露：
     - 所有知情者對玩家保持防備，不主動透露資訊，回答問題時謹慎、簡短
     - 玩家試圖以「朋友」或「賓客」身份套話時，對方應有明顯的戒心反應
@@ -158,8 +155,8 @@ Epilogue謎團：陳宥霖的背叛究竟是謝思語捏造的，還是真實的
     - 玩家在線索明顯不足時貿然指控錯誤的人，導致真兇有時間銷毀證據 → [FAIL]wrong_accusation[/FAIL]
     注意：時間耗盡的失敗由前端觸發，GM不需要處理
 14. 【失敗回應的特殊規則】當玩家做出錯誤指控、觸發 [FAIL] 時：
-    - [CLUES] 和 [NOTES] 標籤內容必須與上一次回應完全相同，不得新增任何條目
-    - 錯誤指控的內容與後果絕對不能作為線索或觀察記錄
+    - [RECAP] 和 [NOTES] 標籤內容必須與上一次回應完全相同，不得新增任何內容
+    - 錯誤指控的內容與後果絕對不能出現在任何標籤裡
     - 時間評分固定為 [TIME]2[/TIME]
 15. 【局面狀態更新】每次回應必須附上當前局面狀態，格式如下：
 [STATE]
@@ -188,22 +185,22 @@ Epilogue謎團：陳宥霖的背叛究竟是謝思語捏造的，還是真實的
 // ── Parse GM response ────────────────────────────────────────────────
 const parseResponse = (rawText) => {
   let text = rawText;
+  if (text.includes("[RECAP]")   && !text.includes("[/RECAP]"))   text = text.replace(/\[RECAP\][\s\S]*$/, "");
   if (text.includes("[CHOICES]") && !text.includes("[/CHOICES]")) text = text.replace(/\[CHOICES\][\s\S]*$/, "");
-  if (text.includes("[CLUES]")   && !text.includes("[/CLUES]"))   text = text.replace(/\[CLUES\][\s\S]*$/, "");
   if (text.includes("[NOTES]")   && !text.includes("[/NOTES]"))   text = text.replace(/\[NOTES\][\s\S]*$/, "");
   if (text.includes("[STATE]")   && !text.includes("[/STATE]"))   text = text.replace(/\[STATE\][\s\S]*$/, "");
   if (text.includes("[TIME]")    && !text.includes("[/TIME]"))     text = text.replace(/\[TIME\][\s\S]*$/, "");
 
+  const recapMatch   = text.match(/\[RECAP\]([\s\S]*?)\[\/RECAP\]/);
   const choicesMatch = text.match(/\[CHOICES\]([\s\S]*?)\[\/CHOICES\]/);
-  const cluesMatch   = text.match(/\[CLUES\]([\s\S]*?)\[\/CLUES\]/);
   const notesMatch   = text.match(/\[NOTES\]([\s\S]*?)\[\/NOTES\]/);
   const stateMatch   = text.match(/\[STATE\]([\s\S]*?)\[\/STATE\]/);
   const timeMatch    = text.match(/\[TIME\](-?\d+)\[\/TIME\]/);
   const failMatch    = text.match(/\[FAIL\](\w+)\[\/FAIL\]/);
 
   let narrative = text
+    .replace(/\[RECAP\][\s\S]*?\[\/RECAP\]/g, "")
     .replace(/\[CHOICES\][\s\S]*?\[\/CHOICES\]/g, "")
-    .replace(/\[CLUES\][\s\S]*?\[\/CLUES\]/g, "")
     .replace(/\[NOTES\][\s\S]*?\[\/NOTES\]/g, "")
     .replace(/\[STATE\][\s\S]*?\[\/STATE\]/g, "")
     .replace(/\[TIME\]-?\d+\[\/TIME\]/g, "")
@@ -224,16 +221,16 @@ const parseResponse = (rawText) => {
     parsedState = { identity, aware, restrictions, situation };
   }
 
-  const PLACEHOLDERS = ["暫無","無","（暫無）","（無）","none","n/a"];
+  const PLACEHOLDERS = ["暫無","無","（暫無）","（無）","none","n/a","目前尚無重要發現。","目前尚無重要發現"];
   const filterItems = (arr) => arr.filter(l => l && !PLACEHOLDERS.includes(l.trim()));
 
   const choices = choicesMatch ? choicesMatch[1].split("\n").map(l => l.replace(/^\d+\.\s*/, "").trim()).filter(Boolean) : [];
-  const clues   = cluesMatch   ? filterItems(cluesMatch[1].split("\n").map(l => l.replace(/^-\s*/, "").trim())) : [];
+  const recap   = recapMatch   ? recapMatch[1].trim() : "";
   const notes   = notesMatch   ? filterItems(notesMatch[1].split("\n").map(l => l.replace(/^-\s*/, "").trim())) : [];
   const timeCost = timeMatch ? parseInt(timeMatch[1], 10) : 1;
   const failType = failMatch ? failMatch[1] : null;
 
-  return { narrative, choices, clues, notes, timeCost, failType, parsedState };
+  return { narrative, choices, recap, notes, timeCost, failType, parsedState };
 };
 
 // ── Time status ──────────────────────────────────────────────────────
@@ -375,7 +372,7 @@ const EMPTY_STATE = () => ({
   messages:    [],
   displayMsgs: [],
   choices:     [],
-  clues:       [],
+  recap:       "",
   notes:       [],
   timeLeft:    TIME_MAX,
   gameOver:    null,
@@ -387,7 +384,7 @@ export default function GhostGunGame() {
   const [messages,     setMessages]     = useState([]);
   const [displayMsgs,  setDisplayMsgs]  = useState([]);
   const [choices,      setChoices]      = useState([]);
-  const [clues,        setClues]        = useState([]);
+  const [recap,        setRecap]        = useState("");
   const [notes,        setNotes]        = useState([]);
   const [input,        setInput]        = useState("");
   const [loading,      setLoading]      = useState(false);
@@ -410,7 +407,7 @@ export default function GhostGunGame() {
         setMessages(saved.messages || []);
         setDisplayMsgs((saved.displayMsgs || []).map(m => ({ ...m, typing: false })));
         setChoices(saved.choices || []);
-        setClues(saved.clues || []);
+        setRecap(saved.recap || "");
         setNotes(saved.notes || []);
         setTimeLeft(saved.timeLeft ?? TIME_MAX);
         setGameOver(saved.gameOver || null);
@@ -423,8 +420,8 @@ export default function GhostGunGame() {
   // ── Auto-save on state changes ───────────────────────────────────
   useEffect(() => {
     if (!storageReady || !playerName) return;
-    saveGame({ playerName, messages, displayMsgs: displayMsgs.map(m => ({ ...m, typing: false })), choices, clues, notes, timeLeft, gameOver, gameState });
-  }, [playerName, messages, clues, notes, timeLeft, gameOver, gameState]);
+    saveGame({ playerName, messages, displayMsgs: displayMsgs.map(m => ({ ...m, typing: false })), choices, recap, notes, timeLeft, gameOver, gameState });
+  }, [playerName, messages, recap, notes, timeLeft, gameOver, gameState]);
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
@@ -441,7 +438,9 @@ export default function GhostGunGame() {
   const callGM = async (msgs, name, state) => {
     setLoading(true); setTypingDone(false); setChoices([]); setRetryMsgs(null);
     try {
-      const res  = await fetch("/api/gm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1024, system: buildSystemPrompt(name || playerName, state !== undefined ? state : gameState), messages: msgs }) });
+      // Keep only last 20 messages to stay within token limits
+      const trimmedMsgs = msgs.length > 20 ? [msgs[0], ...msgs.slice(-19)] : msgs;
+      const res  = await fetch("/api/gm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 1024, system: buildSystemPrompt(name || playerName, state !== undefined ? state : gameState), messages: trimmedMsgs }) });
       let data;
       try { data = await res.json(); } catch (e) { throw new Error(`JSON parse failed (HTTP ${res.status}): ${e.message}`); }
       if (!res.ok || data.error) {
@@ -450,13 +449,13 @@ export default function GhostGunGame() {
       }
       const raw = data.content?.[0]?.text;
       if (!raw) throw new Error(`No content in response. Keys: ${Object.keys(data).join(",")}`);
-      const { narrative, choices: nc, clues: nl, notes: nn, timeCost, failType, parsedState } = parseResponse(raw);
+      const { narrative, choices: nc, recap: nr, notes: nn, timeCost, failType, parsedState } = parseResponse(raw);
       const newMsgs = [...msgs, { role: "assistant", content: raw }];
       setMessages(newMsgs);
       setDisplayMsgs(prev => [...prev, { role: "assistant", content: narrative, typing: true }]);
       setChoices(nc);
       if (!failType) {
-        if (nl.length > 0) setClues(nl);
+        if (nr) setRecap(nr);
         if (nn.length > 0) setNotes(nn);
         if (parsedState) {
           setGameState(prev => !prev ? parsedState : { identity: parsedState.identity, aware: parsedState.aware, restrictions: [...new Set([...prev.restrictions, ...parsedState.restrictions])], situation: parsedState.situation });
@@ -480,7 +479,7 @@ export default function GhostGunGame() {
 
   const startGame = async (name) => {
     setPlayerName(name); setTimeLeft(TIME_MAX); setGameOver(null);
-    setClues([]); setNotes([]); setGameState(null);
+    setRecap(""); setNotes([]); setGameState(null);
     const init = [{ role: "user", content: "開始遊戲" }];
     setMessages(init); setDisplayMsgs([]);
     await callGM(init, name, null);
@@ -490,7 +489,7 @@ export default function GhostGunGame() {
     await clearSave();
     setConfirmReset(false);
     setPlayerName(null); setMessages([]); setDisplayMsgs([]); setChoices([]);
-    setClues([]); setNotes([]); setGameState(null);
+    setRecap(""); setNotes([]); setGameState(null);
     setTimeLeft(TIME_MAX); setGameOver(null); setTypingDone(true); setInput("");
   };
 
@@ -551,13 +550,13 @@ export default function GhostGunGame() {
       {/* Clues panel */}
       {showClues && playerName && (
         <div style={{ width: "100%", maxWidth: 720, zIndex: 1, background: "rgba(8,5,1,0.98)", borderBottom: "1px solid rgba(180,140,60,0.1)", padding: "12px 16px", flexShrink: 0, maxHeight: "30vh", overflowY: "auto" }}>
-          {clues.length === 0 && notes.length === 0 && <div style={{ fontSize: 12, color: "#6a4820", fontStyle: "italic" }}>尚無線索</div>}
-          {clues.length > 0 && <>
-            <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#7a5828", marginBottom: 8, textTransform: "uppercase" }}>關鍵線索</div>
-            {clues.map((c, i) => <div key={i} style={{ fontSize: 13, color: "#c8a855", marginBottom: 5, paddingLeft: 10, borderLeft: "1px solid rgba(200,168,85,0.35)", lineHeight: 1.7 }}>{c}</div>)}
+          {!recap && notes.length === 0 && <div style={{ fontSize: 12, color: "#6a4820", fontStyle: "italic" }}>尚無線索</div>}
+          {recap && <>
+            <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#7a5828", marginBottom: 10, textTransform: "uppercase" }}>重點回顧</div>
+            <div style={{ fontSize: 13, color: "#c8a855", lineHeight: 1.9, paddingLeft: 10, borderLeft: "1px solid rgba(200,168,85,0.35)", marginBottom: notes.length > 0 ? 14 : 0 }}>{recap}</div>
           </>}
           {notes.length > 0 && <>
-            <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#6a5025", marginBottom: 8, marginTop: clues.length > 0 ? 12 : 0, textTransform: "uppercase" }}>一般觀察</div>
+            <div style={{ fontSize: 9, letterSpacing: "0.3em", color: "#6a5025", marginBottom: 8, marginTop: recap ? 12 : 0, textTransform: "uppercase" }}>一般觀察</div>
             {notes.map((n, i) => <div key={i} style={{ fontSize: 13, color: "#706040", marginBottom: 4, paddingLeft: 10, borderLeft: "1px solid rgba(180,140,60,0.15)", lineHeight: 1.7 }}>{n}</div>)}
           </>}
         </div>
