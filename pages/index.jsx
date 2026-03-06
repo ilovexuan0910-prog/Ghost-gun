@@ -397,6 +397,7 @@ export default function GhostGunGame() {
   const [gameState,    setGameState]    = useState(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [storageReady, setStorageReady] = useState(false);
+  const [retryMsgs,    setRetryMsgs]    = useState(null); // last msgs that failed
   const logRef = useRef(null);
 
   // ── Load saved game on mount ─────────────────────────────────────
@@ -437,7 +438,7 @@ export default function GhostGunGame() {
   }, [timeLeft, playerName, gameOver]);
 
   const callGM = async (msgs, name, state) => {
-    setLoading(true); setTypingDone(false); setChoices([]);
+    setLoading(true); setTypingDone(false); setChoices([]); setRetryMsgs(null);
     try {
       const res  = await fetch("/api/gm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1024, system: buildSystemPrompt(name || playerName, state !== undefined ? state : gameState), messages: msgs }) });
       let data;
@@ -464,7 +465,8 @@ export default function GhostGunGame() {
       if (failType) setGameOver(failType);
     } catch (err) {
       const msg = err?.message || String(err) || "未知錯誤";
-      setDisplayMsgs(prev => [...prev, { role: "assistant", content: `【系統錯誤：${msg}】`, typing: false }]);
+      setDisplayMsgs(prev => [...prev, { role: "assistant", content: `【連線中斷，請點重試】`, typing: false }]);
+      setRetryMsgs({ msgs, name, state });
       setTypingDone(true);
     }
     setLoading(false);
@@ -598,6 +600,15 @@ export default function GhostGunGame() {
                 ))}
               </div>
             </div>
+
+            {/* Retry button */}
+            {retryMsgs && !loading && (
+              <div style={{ padding: "0 16px 8px", display: "flex", justifyContent: "center" }}>
+                <button onClick={() => { setDisplayMsgs(prev => prev.slice(0, -1)); callGM(retryMsgs.msgs, retryMsgs.name, retryMsgs.state); }} style={{ background: "rgba(60,38,8,0.3)", border: "1px solid rgba(180,140,60,0.3)", color: "#c8a855", padding: "8px 24px", cursor: "pointer", fontSize: 12, fontFamily: "inherit", letterSpacing: "0.15em" }}>
+                  重試
+                </button>
+              </div>
+            )}
 
             {/* Free input */}
             <div style={{ padding: "8px 16px 16px", display: "flex", gap: 8, flexShrink: 0 }}>
